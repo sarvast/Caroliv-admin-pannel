@@ -39,6 +39,7 @@ export interface Food {
     fat?: number;
     fiber?: number;
     searchTerms?: string;
+    pairingTags?: string;
     isActive?: boolean;
     createdAt?: string;
     updatedAt?: string;
