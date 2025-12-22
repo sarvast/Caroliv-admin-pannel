@@ -45,6 +45,16 @@ export interface Food {
     updatedAt?: string;
 }
 
+export interface Promotion {
+    id: string;
+    title?: string;
+    imageUrl: string;
+    externalLink: string;
+    delayDays: number;
+    isActive: boolean;
+    createdAt?: string;
+}
+
 export const api = {
     // Generic API call
     async call(endpoint: string, options: ApiOptions = {}) {
@@ -227,6 +237,27 @@ export const api = {
     async rejectExerciseSubmission(id: string) {
         return this.call(`/admin/exercise-submissions/${id}`, {
             method: 'DELETE',
+            requiresAuth: true
+        });
+    },
+
+    // Promotions (Ads)
+    async getPromotions(): Promise<{ success: boolean; data: Promotion[] }> {
+        return this.call('/promotion', { requiresAuth: false });
+    },
+
+    async updatePromotion(id: string, data: Partial<Promotion>) {
+        return this.call(`/admin/promotions/${id}`, {
+            method: 'PUT',
+            body: data,
+            requiresAuth: true
+        });
+    },
+
+    async createPromotion(data: Partial<Promotion>) {
+        return this.call('/admin/promotions', {
+            method: 'POST',
+            body: data,
             requiresAuth: true
         });
     },

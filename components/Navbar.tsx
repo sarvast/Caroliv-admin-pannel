@@ -73,6 +73,24 @@ export default function Navbar() {
                         >
                             Approvals
                         </Link>
+                        <Link
+                            href="/admin/promotions"
+                            className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium transition-all ${isActive('/admin/promotions')
+                                ? 'bg-primary text-primary-foreground'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                                }`}
+                        >
+                            Promotions
+                        </Link>
+                        <Link
+                            href="/admin/announcements"
+                            className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium transition-all ${isActive('/admin/announcements')
+                                ? 'bg-primary text-primary-foreground'
+                                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                                }`}
+                        >
+                            Announcements
+                        </Link>
                     </div>
 
                     {/* Desktop Actions */}

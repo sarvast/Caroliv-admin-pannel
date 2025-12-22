@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-    title: 'Caroliv Admin',
-    description: 'Admin panel for Caroliv fitness app',
+    title: 'Caloriv Admin',
+    description: 'Admin panel for Caloriv fitness app',
 }
 
 export default function RootLayout({
