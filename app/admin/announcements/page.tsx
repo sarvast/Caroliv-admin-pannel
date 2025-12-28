@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 import Modal from '@/components/Modal';
 
 export default function AnnouncementsPage() {
@@ -16,7 +16,7 @@ export default function AnnouncementsPage() {
     const loadAnnouncements = async () => {
         try {
             setLoading(true);
-            const res = await api.call('/features/announcements');
+            const res = await api.getAnnouncements();
             setAnnouncements(res.data || []);
         } catch (err) { } finally { setLoading(false); }
     };
@@ -24,11 +24,7 @@ export default function AnnouncementsPage() {
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.call('/admin/announcements', {
-                method: 'POST',
-                body: newAnno,
-                requiresAuth: true
-            });
+            await api.createAnnouncement(newAnno);
             setModalOpen(false);
             setNewAnno({ title: '', message: '', type: 'info', expiresAt: '' });
             loadAnnouncements();
@@ -38,7 +34,7 @@ export default function AnnouncementsPage() {
     const handleDelete = async (id: string) => {
         if (!confirm('Delete this announcement?')) return;
         try {
-            await api.call(`/admin/announcements/${id}`, { method: 'DELETE', requiresAuth: true });
+            await api.deleteAnnouncement(id);
             loadAnnouncements();
         } catch (err) { alert('Failed to delete'); }
     };
@@ -89,9 +85,9 @@ export default function AnnouncementsPage() {
                     <div>
                         <label className="block text-sm text-gray-400 mb-1">Type</label>
                         <select className="w-full bg-white/10 border border-white/10 rounded-lg p-3 text-white" value={newAnno.type} onChange={e => setNewAnno({ ...newAnno, type: e.target.value })}>
-                            <option value="info">Information (Blue)</option>
-                            <option value="warning">Warning (Orange)</option>
-                            <option value="success">Success (Green)</option>
+                            <option value="info" className="bg-gray-900 text-white">Information (Blue)</option>
+                            <option value="warning" className="bg-gray-900 text-white">Warning (Orange)</option>
+                            <option value="success" className="bg-gray-900 text-white">Success (Green)</option>
                         </select>
                     </div>
                     <div>

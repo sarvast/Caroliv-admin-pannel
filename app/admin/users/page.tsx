@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 import { api } from '@/lib/api';
 
 interface User {
@@ -20,6 +20,8 @@ interface User {
     waist?: number;
     arms?: number;
     hips?: number;
+    currentStreak?: number;
+    streakShields?: number;
     createdAt: string;
 }
 
@@ -57,6 +59,20 @@ export default function UsersPage() {
             setUsers(users.filter(u => u.id !== id));
         } catch (error: any) {
             alert(error.message || 'Failed to delete user');
+        }
+    };
+
+    const handleEngagementUpdate = async (userId: string, currentStreak: number, streakShields: number) => {
+        try {
+            const res = await api.updateUserEngagement(userId, { currentStreak, streakShields });
+            if (res.success) {
+                setUsers(users.map(u => u.id === userId ? { ...u, currentStreak, streakShields } : u));
+                if (selectedUser?.id === userId) {
+                    setSelectedUser({ ...selectedUser, currentStreak, streakShields });
+                }
+            }
+        } catch (err: any) {
+            alert('Failed to update engagement: ' + err.message);
         }
     };
 
@@ -328,6 +344,40 @@ export default function UsersPage() {
                                     <p className="text-lg font-semibold text-foreground">
                                         {new Date(selectedUser.createdAt).toLocaleDateString()}
                                     </p>
+                                </div>
+
+                                <div className="p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl md:col-span-2">
+                                    <h3 className="text-lg font-semibold text-purple-200 mb-3 flex items-center gap-2">
+                                        🔥 Engagement Status
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-4 text-center">
+                                        <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Current Streak</p>
+                                            <div className="flex items-center justify-center gap-3">
+                                                <p className="text-2xl font-bold text-white">{selectedUser.currentStreak || 0} Days</p>
+                                                <div className="flex gap-1">
+                                                    <button
+                                                        onClick={() => handleEngagementUpdate(selectedUser.id, (selectedUser.currentStreak || 0) + 1, selectedUser.streakShields || 0)}
+                                                        className="text-xs bg-white/10 hover:bg-white/20 p-1 rounded"
+                                                    >+1</button>
+                                                    <button
+                                                        onClick={() => handleEngagementUpdate(selectedUser.id, 0, selectedUser.streakShields || 0)}
+                                                        className="text-xs bg-red-500/20 hover:bg-red-500/30 p-1 rounded"
+                                                    >Reset</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-muted-foreground mb-1">Streak Shields</p>
+                                            <div className="flex items-center justify-center gap-3">
+                                                <p className="text-2xl font-bold text-white">{selectedUser.streakShields || 0} 🔥</p>
+                                                <button
+                                                    onClick={() => handleEngagementUpdate(selectedUser.id, selectedUser.currentStreak || 0, (selectedUser.streakShields || 0) + 1)}
+                                                    className="text-xs bg-blue-500/20 hover:bg-blue-500/40 text-blue-200 px-2 py-1 rounded"
+                                                >+ Grant Shield</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {/* Measurements Section */}

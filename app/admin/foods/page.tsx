@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api, Food } from '@/lib/api';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
+import { BulkUploadModal } from '@/components/BulkUploadModal';
 
 const CATEGORIES = ['Grains', 'Protein', 'Fruits', 'Vegetables', 'Dairy', 'Snacks', 'Beverages', 'Sweets', 'Other'];
 
@@ -13,6 +14,7 @@ export default function FoodsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [filter, setFilter] = useState({ category: '', search: '' });
+    const [showBulkModal, setShowBulkModal] = useState(false);
 
     useEffect(() => {
         loadFoods();
@@ -64,12 +66,20 @@ export default function FoodsPage() {
                         <h1 className="text-4xl font-bold text-foreground mb-2">Foods</h1>
                         <p className="text-muted-foreground">Manage food items database</p>
                     </div>
-                    <button
-                        onClick={() => router.push('/admin/foods/new')}
-                        className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all"
-                    >
-                        + Add Food
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setShowBulkModal(true)}
+                            className="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 px-6 py-3 rounded-lg font-semibold transition-colors border border-purple-500/30"
+                        >
+                            📦 Bulk Upload
+                        </button>
+                        <button
+                            onClick={() => router.push('/admin/foods/new')}
+                            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all"
+                        >
+                            + Add Food
+                        </button>
+                    </div>
                 </div>
 
                 {/* Error */}
@@ -322,6 +332,16 @@ export default function FoodsPage() {
                     </div>
                 )}
             </div>
+
+            {showBulkModal && (
+                <BulkUploadModal
+                    onClose={() => setShowBulkModal(false)}
+                    onComplete={() => {
+                        setShowBulkModal(false);
+                        loadFoods();
+                    }}
+                />
+            )}
         </div >
     );
 }

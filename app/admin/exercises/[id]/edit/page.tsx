@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { api, Exercise } from '@/lib/api';
 import ExerciseForm from '@/components/ExerciseForm';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 
 export default function EditExercisePage() {
     const router = useRouter();

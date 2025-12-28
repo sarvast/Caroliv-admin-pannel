@@ -78,15 +78,15 @@ export default function AppUpdatesPage() {
                 {/* Message */}
                 {message && (
                     <div className={`mb-6 p-4 rounded-lg ${message.type === 'success'
-                            ? 'bg-green-500/20 border border-green-500 text-green-200'
-                            : 'bg-red-500/20 border border-red-500 text-red-200'
+                        ? 'bg-green-500/20 border border-green-500 text-green-200'
+                        : 'bg-red-500/20 border border-red-500 text-red-200'
                         }`}>
                         {message.text}
                     </div>
                 )}
 
                 {/* Main Card */}
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
+                <div className="glass-morphism rounded-2xl p-8">
                     <div className="space-y-6">
                         {/* Required Version */}
                         <div>
@@ -187,11 +187,11 @@ export default function AppUpdatesPage() {
 
                 {/* Current Status */}
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
+                    <div className="glass-morphism rounded-xl p-4">
                         <div className="text-sm text-gray-400 mb-1">Current Required Version</div>
                         <div className="text-2xl font-bold text-white">{config.requiredVersion}</div>
                     </div>
-                    <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4 border border-white/10">
+                    <div className="glass-morphism rounded-xl p-4">
                         <div className="text-sm text-gray-400 mb-1">Force Update Status</div>
                         <div className={`text-2xl font-bold ${config.forceUpdate ? 'text-red-400' : 'text-green-400'}`}>
                             {config.forceUpdate ? 'ENABLED' : 'DISABLED'}

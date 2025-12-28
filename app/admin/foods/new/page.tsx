@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import FoodForm from '@/components/FoodForm';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 
 export default function NewFoodPage() {
     const router = useRouter();

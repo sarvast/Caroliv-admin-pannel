@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import ExerciseForm from '@/components/ExerciseForm';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 
 export default function NewExercisePage() {
     const router = useRouter();

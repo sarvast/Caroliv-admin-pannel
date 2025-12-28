@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api, Exercise } from '@/lib/api';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 
 const CATEGORIES = ['chest', 'back', 'shoulders', 'legs', 'arms', 'core', 'cardio', 'flexibility', 'other'];
 const DIFFICULTIES = ['beginner', 'intermediate', 'advanced'];

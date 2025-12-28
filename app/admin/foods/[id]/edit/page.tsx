@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { api, Food } from '@/lib/api';
 import FoodForm from '@/components/FoodForm';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 
 export default function EditFoodPage() {
     const router = useRouter();

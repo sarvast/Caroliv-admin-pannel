@@ -1,5 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://20.197.14.33:3000/api';
-const ADMIN_KEY = process.env.NEXT_PUBLIC_ADMIN_KEY || 'your-admin-api-key';
+// FORCED: Hardcoded to VM IP to prevent localhost fallback
+const API_BASE_URL = 'http://20.197.14.33:3000/api';
+const ADMIN_KEY = 'caloriv-admin-2025';
 
 interface ApiOptions {
     method?: string;
@@ -65,7 +66,13 @@ export const api = {
         };
 
         if (requiresAuth) {
-            headers['X-Admin-Key'] = ADMIN_KEY;
+            // Priority: stored token > env key
+            const storedToken = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+            if (storedToken) {
+                headers['Authorization'] = `Bearer ${storedToken}`;
+            } else {
+                headers['x-admin-key'] = ADMIN_KEY;
+            }
         }
 
         const config: RequestInit = {
@@ -98,16 +105,21 @@ export const api = {
         }
     },
 
+    // Dashboard Stats
+    async getStats() {
+        return this.call('/admin/stats', { requiresAuth: true });
+    },
+
     // Exercises
     async getExercises(category?: string, difficulty?: string, search?: string): Promise<{ success: boolean; data: Exercise[]; count?: number }> {
-        let url = '/exercises';
+        let url = '/admin/exercises';
         const params = new URLSearchParams();
         if (category) params.append('category', category);
         if (difficulty) params.append('difficulty', difficulty);
         if (search) params.append('search', search);
         if (params.toString()) url += `?${params.toString()}`;
 
-        return this.call(url, { requiresAuth: false });
+        return this.call(url, { requiresAuth: true });
     },
 
     async createExercise(data: Partial<Exercise>): Promise<{ success: boolean; data: Exercise }> {
@@ -135,9 +147,9 @@ export const api = {
 
     // Foods
     async getFoods(category?: string): Promise<{ success: boolean; data: Food[]; count?: number }> {
-        let url = '/foods';
+        let url = '/admin/foods';
         if (category) url += `?category=${category}`;
-        return this.call(url, { requiresAuth: false });
+        return this.call(url, { requiresAuth: true });
     },
 
     async createFood(data: Partial<Food>): Promise<{ success: boolean; data: Food }> {
@@ -165,15 +177,11 @@ export const api = {
 
     // Auth (for admin login)
     async adminLogin(email: string, password: string) {
-        // Hardcoded admin credentials
-        const ADMIN_EMAIL = 'ss8971132@gmail.com';
-        const ADMIN_PASSWORD = '##hellosarvasva69';
-
-        if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-            return { success: true, token: 'admin_token_caroliv' };
-        }
-
-        throw new Error('Invalid email or password');
+        return this.call('/admin/login', {
+            method: 'POST',
+            body: { email, password },
+            requiresAuth: false
+        });
     },
 
     // App Config
@@ -194,11 +202,28 @@ export const api = {
         });
     },
 
+    // User Engagement
+    async updateUserEngagement(userId: string, data: { currentStreak: number, streakShields: number }): Promise<{ success: boolean; message?: string }> {
+        return this.call(`/admin/users/${userId}/engagement`, {
+            method: 'PUT',
+            body: data,
+            requiresAuth: true
+        });
+    },
+
     // User Password Reset
     async resetUserPassword(userId: string, newPassword: string): Promise<{ success: boolean; message?: string }> {
         return this.call(`/admin/users/${userId}/password`, {
             method: 'PUT',
             body: { password: newPassword },
+            requiresAuth: true
+        });
+    },
+
+    // User Deletion
+    async deleteUser(userId: string): Promise<{ success: boolean; message?: string }> {
+        return this.call(`/admin/users/${userId}`, {
+            method: 'DELETE',
             requiresAuth: true
         });
     },
@@ -243,7 +268,7 @@ export const api = {
 
     // Promotions (Ads)
     async getPromotions(): Promise<{ success: boolean; data: Promotion[] }> {
-        return this.call('/promotion', { requiresAuth: false });
+        return this.call('/admin/promotions', { requiresAuth: true });
     },
 
     async updatePromotion(id: string, data: Partial<Promotion>) {
@@ -258,6 +283,26 @@ export const api = {
         return this.call('/admin/promotions', {
             method: 'POST',
             body: data,
+            requiresAuth: true
+        });
+    },
+
+    // Announcements
+    async getAnnouncements(): Promise<{ success: boolean; data: any[] }> {
+        return this.call('/admin/announcements', { requiresAuth: true });
+    },
+
+    async createAnnouncement(data: any) {
+        return this.call('/admin/announcements', {
+            method: 'POST',
+            body: data,
+            requiresAuth: true
+        });
+    },
+
+    async deleteAnnouncement(id: string) {
+        return this.call(`/admin/announcements/${id}`, {
+            method: 'DELETE',
             requiresAuth: true
         });
     },

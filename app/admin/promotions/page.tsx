@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { api, Promotion } from '@/lib/api';
-import GlassCard from '@/components/GlassCard';
+import { GlassCard } from '@/components/GlassCard';
 import Modal from '@/components/Modal';
 
 export default function PromotionsPage() {

@@ -31,7 +31,7 @@ export default function AdminLogin() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black flex items-center justify-center p-4">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-md border border-white/20">
+            <div className="glass-morphism rounded-2xl p-8 w-full max-w-md">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-white mb-2">Caroliv Admin</h1>
                     <p className="text-gray-300">Sign in to manage content</p>
@@ -83,7 +83,7 @@ export default function AdminLogin() {
 
                 <div className="mt-8 pt-6 border-t border-white/10">
                     <p className="text-gray-400 text-sm text-center">
-                        Crafted by <span className="text-white font-semibold">Sarvasva</span>
+                        Crafted by <span className="text-white font-semibold">Caloriv</span>
                     </p>
                 </div>
             </div>
